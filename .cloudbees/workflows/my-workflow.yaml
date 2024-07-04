@@ -11,8 +11,7 @@ jobs:
   build:
     steps:
       - name: Build with Maven
-        uses: docker://maven:3.8.1-openjdk-11
-        shell: sh
+        uses: docker://maven:3.8.1-openjdk-17
         run: |
           mvn clean install
 
