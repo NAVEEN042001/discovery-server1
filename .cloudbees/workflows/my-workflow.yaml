@@ -1,3 +1,5 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: workflow
 name: My automation
 
 on:
@@ -7,51 +9,21 @@ on:
 
 jobs:
   Checkout:
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: checkout
+        uses: cloudbees-io/checkout@v1
 
   Build:
     needs: Checkout
-    runs-on: ubuntu-latest
     steps:
-      - name: Set git safe directory
-        uses: actions/checkout@v2
-        run: git config --global --add safe.directory /cloudbees/workspace
+      - uses: docker://alpine/git:latest
+        run: |
+          git config --global --add safe.directory /cloudbees/workspace
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: checkout
+        uses: cloudbees-io/checkout@v1
 
-      - name: Build
+      - name: Build 
         uses: docker://maven:3-eclipse-temurin-17
-        with:
-          args: mvn clean install
-
-  StaticAnalysis:
-    needs: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Scan with SonarQube
-        uses: cloudbees-io/sonarqube-sast-scan-code@v1
-        with:
-          server-url: ${{ secrets.STATIC_URL }}
-          username: ${{ secrets.STATIC_USERNAME }}
-          password: ${{ secrets.STATIC_PASSWORD }}
-          language: Java
-
-      - name: Scan with SonarQube Bundled
-        uses: cloudbees-io/sonarqube-bundled-sast-scan-code@v2
-        with:
-          language: JAVA
-
-      - name: Scan with Find Security Bugs
-        uses: cloudbees-io/findsecbugs-sast-scan-code@v1
-        with:
-          language: JAVA
-
-      - name: Scan GP
-        uses: sbatchelder-cba/sonarqube-cba@v0.0.3
-        with:
-          project-key: discovery-server1
-          token: ${{ secrets.SONARQUBE_TOKEN }}
+        run: |
+          mvn clean install 
