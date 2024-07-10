@@ -31,11 +31,29 @@ jobs:
     needs: Build
     steps:
       - uses: cloudbees-io/sonarqube-sast-scan-code@v1
-        name: cloudbeesIO
+        name: Scan
         kind: scan
         with:
-          server-url: http://192.168.1.12:9000
-          username: admin
-          password: admin
+          server-url: ${{ STATIC_URL}}
+          username: ${{ STATIC_USERNAME }}
+          password: ${{ STATIC_PASSWORD }}
           language: Java
+
+      - uses: cloudbees-io/sonarqube-bundled-sast-scan-code@v2
+        name: Scan with Java
+        kind: scan
+        with:
+          language: JAVA
+
+      - uses: cloudbees-io/findsecbugs-sast-scan-code@v1
+        name: Scan with Find Security Bugs
+        kind: scan
+        with:
+          language: LANGUAGE_JAVA
+
+      - uses: sbatchelder-cba/sonarqube-cba@v0.0.3
+        name: Scan GP
+        with:
+          project-key: discovery-server1
+          token: 412cedab43d7d8c5fb46ba835c7b98dd7c0fc718
          
