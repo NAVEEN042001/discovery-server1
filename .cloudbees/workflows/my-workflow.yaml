@@ -31,29 +31,28 @@ jobs:
   StaticAnalysis:
     needs: Build
     steps:
-      - uses: cloudbees-io/sonarqube-sast-scan-code@v1
-        name: Scan
-        kind: scan
+     
+
+      - name: Scan with SonarQube
+        uses: cloudbees-io/sonarqube-sast-scan-code@v1
         with:
           server-url: ${{ secrets.STATIC_URL }}
           username: ${{ secrets.STATIC_USERNAME }}
           password: ${{ secrets.STATIC_PASSWORD }}
           language: Java
 
-      - uses: cloudbees-io/sonarqube-bundled-sast-scan-code@v2
-        name: Scan with Java
-        kind: scan
+      - name: Scan with SonarQube Bundled
+        uses: cloudbees-io/sonarqube-bundled-sast-scan-code@v2
         with:
           language: JAVA
 
-      - uses: cloudbees-io/findsecbugs-sast-scan-code@v1
-        name: Scan with Find Security Bugs
-        kind: scan
+      - name: Scan with Find Security Bugs
+        uses: cloudbees-io/findsecbugs-sast-scan-code@v1
         with:
           language: LANGUAGE_JAVA
 
-      - uses: sbatchelder-cba/sonarqube-cba@v0.0.3
-        name: Scan GP
+      - name: Scan GP
+        uses: sbatchelder-cba/sonarqube-cba@v0.0.3
         with:
           project-key: discovery-server1
           token: 412cedab43d7d8c5fb46ba835c7b98dd7c0fc718
