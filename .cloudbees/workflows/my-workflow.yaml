@@ -10,29 +10,28 @@ on:
 jobs:
   Checkout:
     steps:
-      - name: checkout
-        uses: cloudbees-io/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
 
   Build:
     needs: Checkout
     steps:
-      - uses: docker://alpine/git:latest
+      - name: Set git safe directory
+        uses: actions/checkout@v2
         run: |
           git config --global --add safe.directory /cloudbees/workspace
 
-      - name: checkout
-        uses: cloudbees-io/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Build 
+      - name: Build
         uses: docker://maven:3-eclipse-temurin-17
-        run: |
-          mvn clean install
+        with:
+          args: mvn clean install
 
   StaticAnalysis:
     needs: Build
     steps:
-     
-
       - name: Scan with SonarQube
         uses: cloudbees-io/sonarqube-sast-scan-code@v1
         with:
@@ -49,10 +48,10 @@ jobs:
       - name: Scan with Find Security Bugs
         uses: cloudbees-io/findsecbugs-sast-scan-code@v1
         with:
-          language: LANGUAGE_JAVA
+          language: JAVA
 
       - name: Scan GP
         uses: sbatchelder-cba/sonarqube-cba@v0.0.3
         with:
           project-key: discovery-server1
-          token: 412cedab43d7d8c5fb46ba835c7b98dd7c0fc718
+          token: ${{ secrets.SONARQUBE_TOKEN }}
