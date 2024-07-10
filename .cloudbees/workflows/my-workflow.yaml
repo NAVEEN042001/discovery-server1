@@ -27,6 +27,7 @@ jobs:
         uses: docker://maven:3-eclipse-temurin-17
         run: |
           mvn clean install
+
   StaticAnalysis:
     needs: Build
     steps:
@@ -34,9 +35,9 @@ jobs:
         name: Scan
         kind: scan
         with:
-          server-url: ${{ STATIC_URL }}
-          username: ${{ STATIC_USERNAME }}
-          password: ${{ STATIC_PASSWORD }}
+          server-url: ${{ secrets.STATIC_URL }}
+          username: ${{ secrets.STATIC_USERNAME }}
+          password: ${{ secrets.STATIC_PASSWORD }}
           language: Java
 
       - uses: cloudbees-io/sonarqube-bundled-sast-scan-code@v2
@@ -56,4 +57,3 @@ jobs:
         with:
           project-key: discovery-server1
           token: 412cedab43d7d8c5fb46ba835c7b98dd7c0fc718
-         
