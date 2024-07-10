@@ -26,4 +26,16 @@ jobs:
       - name: Build 
         uses: docker://maven:3-eclipse-temurin-17
         run: |
-          mvn clean install 
+          mvn clean install
+  StaticAnalysis:
+    needs: Build
+    steps:
+      - uses: cloudbees-io/sonarqube-sast-scan-code@v1
+        name: cloudbeesIO
+        kind: scan
+        with:
+          server-url: http://192.168.1.12:9000
+          username: admin
+          password: admin
+          language: Java
+         
