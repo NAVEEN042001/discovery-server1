@@ -34,7 +34,7 @@ jobs:
         name: Scan
         kind: scan
         with:
-          server-url: ${{ STATIC_URL}}
+          server-url: ${{ STATIC_URL }}
           username: ${{ STATIC_USERNAME }}
           password: ${{ STATIC_PASSWORD }}
           language: Java
