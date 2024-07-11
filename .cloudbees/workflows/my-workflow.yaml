@@ -40,8 +40,8 @@ jobs:
         uses: docker://sonarsource/sonar-scanner-cli:latest
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=visits \
+            -Dsonar.projectKey=cloudbeesIO \
             -Dsonar.sources=/cloudbees/workspace \
             -Dsonar.java.binaries=/cloudbees/workspace/target/classes \
-            -Dsonar.host.url=http://192.168.1.12:9000 \
-            -Dsonar.login=20e414018be1508e8a472229e7ec07da1a13cfa1        
+            -Dsonar.host.url=https://sonarqube.cb-demos.io \
+            -Dsonar.login=20e414018be1508e8a472229e7ec07da1a13cfa1       
